@@ -1,11 +1,12 @@
 #!/bin/bash
 
-# Change directory to the location of your Node.js program
-cd ../src/
+# Get the source folder's full path.
+SOURCE_FULL_PATH="$(realpath ../src/)"
 
-# Get the program's full path.
-PROGRAM_FULL_PATH="$(realpath index.js)"
-CRON_COMMAND="/usr/bin/node -r dotenv/config $PROGRAM_FULL_PATH"
+# Change directory to the location of your Node.js program
+cd $SOURCE_FULL_PATH
+
+CRON_COMMAND="cd $SOURCE_FULL_PATH; node -r dotenv/config ./index.js"
 
 # Check if the cron job is already present
 if crontab -l | grep -q "$CRON_COMMAND"; then
