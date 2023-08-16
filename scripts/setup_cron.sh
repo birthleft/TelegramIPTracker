@@ -1,16 +1,18 @@
 #!/bin/bash
 
-CRON_COMMAND='/usr/bin/node -r dotenv/config index.js'
-
 # Change directory to the location of your Node.js program
 cd ../src/
+
+# Get the program's full path.
+PROGRAM_FULL_PATH="$(realpath index.js)"
+CRON_COMMAND="/usr/bin/node -r dotenv/config $PROGRAM_FULL_PATH"
 
 npm install
 
 # Check if the cron job is already set up for the Node.js program
 if ! crontab -l | grep -q "$CRON_COMMAND"; then
 	# Install Node.js program
-    npm install
+	npm install
     # Set up the cron job to run the Node.js program every 30 minutes
     (crontab -l 2>/dev/null; echo "*/30 * * * * $CRON_COMMAND") | crontab -
     # Check if the cron job has been added successfully
